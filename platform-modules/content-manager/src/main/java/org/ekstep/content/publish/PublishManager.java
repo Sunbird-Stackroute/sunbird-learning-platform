@@ -73,6 +73,7 @@ public class PublishManager extends BaseManager {
 				response.put(ContentAPIParams.publishStatus.name(), "Config value not found");
 			}
 		}
+		response.setResponseCode(ResponseCode.OK);
 
 		return response;
 	}
