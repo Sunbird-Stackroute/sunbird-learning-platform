@@ -53,7 +53,7 @@ public class PublishManager extends BaseManager {
 		if (!checkError(response)) {
 			if (null == response)
 				response = new Response();
-			response.put(ContentAPIParams.publishStatus.name(), "Publish Operation for Content Id '" + contentId
+			response.put(ContentAPIParams.publishStatus.name(), "Publishh Operation for Content Id '" + contentId
 					+ "' Started Successfully!");
 			if (Platform.config.hasPath("content.publish_task.enabled")) {
 				if (Platform.config.getBoolean("content.publish_task.enabled")) {
@@ -67,7 +67,11 @@ public class PublishManager extends BaseManager {
 						response.getResult().put("error", e.getMessage());
 						response.getResult().put("trace", Arrays.toString(e.getStackTrace()));
 					}
+				} else {
+					response.put(ContentAPIParams.publishStatus.name(), "Config value false");
 				}
+			} else {
+				response.put(ContentAPIParams.publishStatus.name(), "Config value not found");
 			}
 		}
 
