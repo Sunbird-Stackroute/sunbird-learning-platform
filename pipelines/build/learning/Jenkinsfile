@@ -6,7 +6,7 @@ node() {
         String ANSI_BOLD = "\u001B[1m"
         String ANSI_RED = "\u001B[31m"
         String ANSI_YELLOW = "\u001B[33m"
-        
+
         ansiColor('xterm') {
             stage('Checkout') {
                 cleanWs()
@@ -19,7 +19,7 @@ node() {
                 }
                 else {
                     def scmVars = checkout scm
-                    checkout scm: [$class: 'GitSCM', branches: [[name: "refs/tags/${params.github_release_tag}"]],  userRemoteConfigs: [[url: scmVars.GIT_URL]]]
+                    checkout scm: [$class: 'GitSCM', branches: [[name: "${params.github_release_tag}"]],  userRemoteConfigs: [[url: scmVars.GIT_URL]]]
                     artifact_version = params.github_release_tag
                     println(ANSI_BOLD + ANSI_YELLOW + "github_release_tag specified, building from github_release_tag: " + params.github_release_tag + ANSI_NORMAL)
                 }
@@ -66,7 +66,7 @@ node() {
                         cp platform-tools/spikes/content-tool/target/content-tool-*.jar lp_artifacts
                         zip -j lp_artifacts.zip:${artifact_version} lp_artifacts/*
                     """
-            }        
+            }
             else {
                  sh """
                         mkdir lp_artifacts
@@ -75,7 +75,7 @@ node() {
                         zip -j lp_artifacts.zip:${artifact_version} lp_artifacts/*
                     """
               }
-                 
+
             archiveArtifacts artifacts: "lp_artifacts.zip:${artifact_version}", fingerprint: true, onlyIfSuccessful: true
             sh """echo {\\"artifact_name\\" : \\"lp_artifacts.zip\\", \\"artifact_version\\" : \\"${artifact_version}\\", \\"node_name\\" : \\"${env.NODE_NAME}\\"} > metadata.json"""
             archiveArtifacts artifacts: 'metadata.json', onlyIfSuccessful: true
