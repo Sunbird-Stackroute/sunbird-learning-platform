@@ -1,6 +1,7 @@
 package org.ekstep.content.publish;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -11,9 +12,11 @@ import org.ekstep.common.Platform;
 import org.ekstep.common.dto.Request;
 import org.ekstep.common.dto.Response;
 import org.ekstep.common.enums.TaxonomyErrorCodes;
+import org.ekstep.common.exception.ResponseCode;
 import org.ekstep.common.exception.ServerException;
 import org.ekstep.common.mgr.BaseManager;
 import org.ekstep.common.router.RequestRouterPool;
+import org.ekstep.content.enums.ContentWorkflowPipelineParams;
 import org.ekstep.content.pipeline.initializer.InitializePipeline;
 import org.ekstep.graph.dac.model.Node;
 import org.ekstep.learning.common.enums.ContentAPIParams;
@@ -55,7 +58,15 @@ public class PublishManager extends BaseManager {
 			if (Platform.config.hasPath("content.publish_task.enabled")) {
 				if (Platform.config.getBoolean("content.publish_task.enabled")) {
 					TelemetryManager.info("Publish task execution starting for content Id: " + contentId);
-					executor.submit(new PublishTask(parameterMap));
+					Node node1 = (Node) parameterMap.get(ContentWorkflowPipelineParams.node.name());
+					try {
+						response = new PublishTask(parameterMap).publishContent(node1);
+					} catch (Exception e) {
+						e.printStackTrace();
+						response.setResponseCode(ResponseCode.SERVER_ERROR);
+						response.getResult().put("error", e.getMessage());
+						response.getResult().put("trace", Arrays.toString(e.getStackTrace()));
+					}
 				}
 			}
 		}
@@ -90,7 +101,7 @@ public class PublishManager extends BaseManager {
 		else
 			return tmpLocation + File.separator + System.currentTimeMillis() + ContentAPIParams._temp.name() + File.separator + contentId;
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
 		executor.shutdown();

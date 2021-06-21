@@ -1,5 +1,6 @@
 package org.ekstep.content.publish;
 
+import org.ekstep.common.dto.Response;
 import org.ekstep.common.exception.ClientException;
 import org.ekstep.content.common.ContentErrorMessageConstants;
 import org.ekstep.content.enums.ContentErrorCodeConstants;
@@ -35,15 +36,15 @@ public class PublishTask implements Runnable {
 		}
 	}
 
-	private void publishContent(Node node) throws Exception{
+	public Response publishContent(Node node) throws Exception{
 		TelemetryManager.info("Publish processing start for content" + node.getIdentifier());
-		publishNode(node, (String) node.getMetadata().get("mimeType"));
-		TelemetryManager.info("Publish processing done for content: "+ node.getIdentifier());
+		return publishNode(node, (String) node.getMetadata().get("mimeType"));
+		//TelemetryManager.info("Publish processing done for content: "+ node.getIdentifier());
 	}
-	
-		
 
-	private void publishNode(Node node, String mimeType) {
+
+
+	public Response publishNode(Node node, String mimeType) {
 
 		if (null == node)
 			throw new ClientException(ContentErrorCodeConstants.INVALID_CONTENT.name(), ContentErrorMessageConstants.INVALID_CONTENT
@@ -59,13 +60,14 @@ public class PublishTask implements Runnable {
 			this.parameterMap.put(ContentWorkflowPipelineParams.node.name(), node);
 			this.parameterMap.put(ContentWorkflowPipelineParams.ecmlType.name(), PublishManager.isECMLContent(mimeType));
 			InitializePipeline pipeline = new InitializePipeline(basePath, nodeId);
-			pipeline.init(ContentWorkflowPipelineParams.publish.name(), this.parameterMap);
+			return pipeline.init(ContentWorkflowPipelineParams.publish.name(), this.parameterMap);
 		} catch (Exception e) {
 			TelemetryManager.error("Something Went Wrong While Performing 'Content Publish' Operation in Async Mode. | [Content Id: " + nodeId
 					+ "]", e);
 			cloneNode.getMetadata().put(ContentWorkflowPipelineParams.publishError.name(), e.getMessage());
 			cloneNode.getMetadata().put(ContentWorkflowPipelineParams.status.name(), ContentWorkflowPipelineParams.Failed.name());
 			util.updateNode(cloneNode);
+			throw e;
 		}
 	}
 
