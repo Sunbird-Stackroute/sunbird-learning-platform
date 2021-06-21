@@ -63,7 +63,6 @@ public class PublishManager extends BaseManager {
 						response = new PublishTask(parameterMap).publishContent(node1);
 					} catch (Exception e) {
 						e.printStackTrace();
-						response.setResponseCode(ResponseCode.SERVER_ERROR);
 						response.getResult().put("error", e.getMessage());
 						response.getResult().put("trace", Arrays.toString(e.getStackTrace()));
 					}
