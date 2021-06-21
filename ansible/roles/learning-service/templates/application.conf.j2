@@ -34,6 +34,7 @@ publisher.keyspace.table="publisher"
 dialcode.strip.chars="0"
 dialcode.length=6.0
 dialcode.large.prime_number=1679979167
+content.publish_task.enabled=true
 
 dialcode.es_conn_info="{{ dial_es_index_host }}"
 dialcode.search.limit=1000
@@ -44,7 +45,7 @@ dialcode.search.limit=1000
 
 audit.es_conn_info="{{ audit_es_index_host  }}"
 
-#Assessment Item Configuration 
+#Assessment Item Configuration
 assessment.keyspace.name="{{ content_keyspace_name }}"
 assessment.keyspace.table="question_data"
 
@@ -64,7 +65,7 @@ LearningActorSystem {
           throughput = 1
       }
       deployment {
-        /SearchManager 
+        /SearchManager
         {
           router = smallest-mailbox-pool
           nr-of-instances = 5
@@ -94,7 +95,7 @@ LanguageActorSystem {
         throughput = 1
       }
       deployment {
-        /SearchManager 
+        /SearchManager
         {
           router = smallest-mailbox-pool
           nr-of-instances = 5
