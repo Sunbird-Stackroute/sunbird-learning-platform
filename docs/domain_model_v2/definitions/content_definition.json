@@ -1124,7 +1124,8 @@
             "LearningActivity",
             "PreviousBoardExamPapers",
             "LessonPlanResource",
-            "TVLesson"
+            "TVLesson",
+            "Live"
           ],
           "defaultValue": "",
           "renderingHints": "{ 'inputType': 'text',  'order': 14 }",
@@ -1155,7 +1156,8 @@
             "Course",
             "Theory",
             "Worksheet",
-            "Practical"
+            "Practical",
+            "Live Session"
           ],
           "indexed": true,
           "draft": false
@@ -3034,11 +3036,24 @@
             "Plugin",
             "Lesson Plan Unit",
             "Course Unit",
-            "Textbook Unit"
+            "Textbook Unit",
+            "Live Session"
           ],
           "defaultValue": "",
           "renderingHints": "{ 'inputType': 'text',  'order': 14 }",
           "indexed": true,
+          "draft": false
+        },
+        {
+          "dataType": "JSON",
+          "propertyName": "meetingData",
+          "title": "MeetingData",
+          "description": "MeetingData",
+          "category": "General",
+          "displayProperty": "Readonly",
+          "defaultValue": "",
+          "renderingHints": "{ 'inputType': 'textarea', 'order': 10 }",
+          "indexed": false,
           "draft": false
         },
         {
@@ -3405,7 +3420,8 @@
           "leafNodes",
           "origin",
           "originData",
-          "plugins"
+          "plugins",
+          "meetingData"
         ]
       }
     }
