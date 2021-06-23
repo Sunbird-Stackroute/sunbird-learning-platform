@@ -3053,7 +3053,7 @@
           "displayProperty": "Readonly",
           "defaultValue": "",
           "renderingHints": "{ 'inputType': 'textarea', 'order': 10 }",
-          "indexed": false,
+          "indexed": true,
           "draft": false
         },
         {
