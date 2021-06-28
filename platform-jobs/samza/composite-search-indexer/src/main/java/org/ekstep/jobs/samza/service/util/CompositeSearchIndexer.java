@@ -255,7 +255,7 @@ public class CompositeSearchIndexer extends AbstractESIndexer {
 	private void addMetadataToDocument(Map.Entry<String, Object> propertyMap, String propertyName, Map<String, Object> indexDocument) throws Exception {
 		// new value of the property
 		Object propertyNewValue = ((Map<String, Object>) propertyMap.getValue()).get("nv");
-		LOGGER.info("New value of property 2======================= :", propertyNewValue);
+		LOGGER.info("New value of property 2======================= :"+ propertyNewValue);
 		// New value from transaction data is null, then remove the property from document
 		if (propertyNewValue == null)
 			indexDocument.remove(propertyName);
@@ -265,7 +265,7 @@ public class CompositeSearchIndexer extends AbstractESIndexer {
 						new TypeReference<Object>() {
 						});
 			}
-			LOGGER.info("New value of property 3======================= :", propertyNewValue);
+			LOGGER.info("New value of property 3======================= :" + propertyNewValue);
 			indexDocument.put(propertyName, propertyNewValue);
 		}
 	}
