@@ -80,6 +80,7 @@ public class CompositeSearchIndexer extends AbstractESIndexer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Map<String, Object> getIndexDocument(Map<String, Object> message,
 												 Map<String, String> relationMap, boolean updateRequest, List<String> indexableProps) throws Exception {
+		LOGGER.info("getIndexDocument method started ================== ");
 		Map<String, Object> indexDocument = new HashMap<String, Object>();
 		String uniqueId = (String) message.get("nodeUniqueId");
 		if (updateRequest) {
@@ -91,6 +92,7 @@ public class CompositeSearchIndexer extends AbstractESIndexer {
 				});
 			}
 		}
+		LOGGER.info("Index document ======================= :" + indexDocument);
 		Map transactionData = (Map) message.get("transactionData");
 		LOGGER.info("Nested Fields ======================= :" + mapper.writeValueAsString(nestedFields));
 		LOGGER.info("Indexable props ======================= :" + mapper.writeValueAsString(indexableProps));
@@ -222,6 +224,7 @@ public class CompositeSearchIndexer extends AbstractESIndexer {
 			break;
 		}
 		case CompositeSearchConstants.OPERATION_UPDATE: {
+			LOGGER.info("Update operation started ================== ");
 			Map<String, Object> indexDocument = getIndexDocument(message, relationMap, true, indexableProps);
 			String jsonIndexDocument = mapper.writeValueAsString(indexDocument);
 			LOGGER.info("json index doc testing 1================== :" + jsonIndexDocument);
