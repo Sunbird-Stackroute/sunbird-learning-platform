@@ -99,6 +99,7 @@ public class BatchEnrolmentSyncManager {
     }
 
     public String generateBatchSyncKafkaEvent(Map<String, Object> rowMap) throws JsonProcessingException {
+        System.out.println("==========  Inside method generateBatchSyncKafkaEvent()   ===========");
         Map<String, Object> event = new HashMap<String, Object>() {{
             put("eid", "BE_JOB_REQUEST");
             put("ets", System.currentTimeMillis());
@@ -337,18 +338,24 @@ public class BatchEnrolmentSyncManager {
     }
 
     private void pushEnrolmentSyncEventsToKafka(List<Map<String, Object>> rows) throws Exception {
+        System.out.println("Inside pushEnrolmentSyncEventsToKafka =======");
         long startTime = System.currentTimeMillis();
         long total = ((Number) rows.size()).longValue();
         long current = 0;
         for(Map<String, Object> row: rows) {
             String enrolSyncEvent = generateBatchSyncKafkaEvent(row);
-            KafkaClient.send(enrolSyncEvent, KAFKA_TOPIC);
+//            KafkaClient.send(enrolSyncEvent, KAFKA_TOPIC);
+            System.out.println("Publish event to the topic : test.coursebatch.job.request ");
+            KafkaClient.send(enrolSyncEvent, "test.coursebatch.job.request");
             String enrolUpdateEvent = generateBatchEnrolUpdateKafkaEvent(row);
-            KafkaClient.send(enrolUpdateEvent, KAFKA_TOPIC);
+//            KafkaClient.send(enrolUpdateEvent, KAFKA_TOPIC);
+            System.out.println("Update event to the topic : test.coursebatch.job.request ");
+            KafkaClient.send(enrolUpdateEvent, "test.coursebatch.job.request");
             current += 1;
             printProgress(startTime, total, current);
         }
-        System.out.println("");
+//        System.out.println("");
+        System.out.println("Event pushed to kafka successfully");
 
     }
 
